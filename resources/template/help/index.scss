@@ -1,0 +1,120 @@
+body {
+	width: 800px;
+}
+
+.container {
+	padding-left: 2%;
+	padding-right: 2%;
+}
+
+.help {
+	.title {
+		margin-top: 10px;
+		font-size: 24px;
+		font-weight: bold;
+
+		strong {
+			font-size: 15px;
+			font-style: italic;
+			color: rgb(237, 160, 109);
+		}
+	}
+
+	.desc {
+		font-size: 12px;
+		font-weight: bold;
+		color: rgba(255, 255, 255, 0.783);
+		margin-top: 5px;
+	}
+
+	.group-info {
+		width: 100%;
+		margin-top: 2%;
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			font-size: 16px;
+			font-weight: bold;
+			display: flex;
+			padding: 5px;
+			align-items: center;
+			background-color: rgba(19, 27, 36, 0.78);
+			backdrop-filter: blur(3px);
+			border-radius: 5px;
+
+			.desc {
+				margin-left: 10px;
+				font-size: 9px;
+				color: rgba(255, 255, 255, 0.702);
+			}
+		}
+
+		.commands {
+			display: flex;
+			flex-wrap: wrap;
+			margin-top: 1.5%;
+
+			.item {
+				width: 24%;
+				height: 50px;
+				margin: 0.5%;
+				display: flex;
+				align-items: center;
+				background-color: rgba(0, 0, 0, 0.301);
+				backdrop-filter: blur(3px);
+				border: 1px solid rgba(116, 98, 5, 0.5);
+				border-radius: 25px 5px 5px 25px;
+
+				.icon-image {
+					height: 40px;
+					width: 40px;
+					border-radius: 50%;
+					background-repeat: no-repeat;
+					background-position: center;
+					background-size: cover;
+				}
+
+				.icon {
+					height: 40px;
+					width: 40px;
+					border-radius: 50%;
+					background: url("../../image/help/icons/icon.png") 0 0 no-repeat;
+					background-size: 500px auto;
+				}
+
+				.info {
+					width: calc(100% - 40px);
+					height: 100%;
+					display: flex;
+					position: relative;
+					flex-direction: column;
+					overflow: hidden;
+
+					&::before {
+						content: "";
+						position: absolute;
+						top: 40%;
+						height: 1px;
+						width: 90%;
+						background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+					}
+
+					.name {
+						margin-left: 5px;
+						font-size: 13px;
+						height: 40%;
+					}
+
+					.desc {
+						height: 60%;
+						margin-top: 2px;
+						margin-left: 5px;
+						font-size: 10px;
+						color: rgba(255, 255, 255, 0.702);
+					}
+				}
+			}
+		}
+	}
+}

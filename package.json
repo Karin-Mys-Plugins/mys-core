@@ -1,57 +1,66 @@
 {
-  "name": "karin-plugin-template-ts",
-  "version": "1.0.0",
-  "author": "Lain",
-  "type": "module",
-  "description": "karin plugin template",
-  "homepage": "https://github.com/KarinJS/karin-plugin-template-ts",
-  "bugs": {
-    "url": "https://github.com/KarinJS/karin-plugin-template-ts/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KarinJS/karin-plugin-template-ts.git"
-  },
-  "scripts": {
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "pub": "npm publish --access public"
-  },
-  "devDependencies": {
-    "@types/node": "^20.17.8",
-    "eslint": "^9.7.0",
-    "neostandard": "^0.11.9",
-    "node-karin": "0.12.25-beta.pr.194.1-1732810940",
-    "tsc-alias": "^1.8.10",
-    "tsx": "^4.19.2",
-    "typescript": "^5.5.3"
-  },
-  "karin": {
-    "apps": [
-      "lib/apps"
-    ],
-    "ts-apps": [
-      "src/apps"
-    ],
-    "static": [
-      "resources"
-    ],
-    "files": [
-      "config",
-      "data",
-      "resources"
-    ]
-  },
-  "files": [
-    "/lib/**/*.js",
-    "/lib/**/*.d.ts",
-    "/config/*.yaml",
-    "resources",
-    "LICENSE",
-    "package.json",
-    "README.md"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  }
+	"name": "karin-mys-core",
+	"version": "1.0.0",
+	"author": "Lain",
+	"type": "module",
+	"description": "karin plugin template",
+	"homepage": "https://github.com/Karin-Mys-Plugins/mys-core",
+	"bugs": {
+		"url": "https://github.com/Karin-Mys-Plugins/mys-core/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Karin-Mys-Plugins/mys-core.git"
+	},
+	"scripts": {
+		"build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+		"pub": "npm publish --access public"
+	},
+	"dependencies": {
+		"sequelize": "^6.37.3",
+		"sqlite3": "5.1.6",
+		"pg": "^8.13.1",
+		"md5": "^2.3.0",
+		"qrcode": "^1.5.3",
+		"image-size": "^1.1.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20.17.8",
+		"@types/md5": "^2.3.5",
+		"@types/qrcode": "^1.5.5",
+		"eslint": "^9.7.0",
+		"neostandard": "^0.11.9",
+		"node-karin": "0.12.25-beta.pr.194.1-1732881372",
+		"tsc-alias": "^1.8.10",
+		"tsx": "^4.19.2",
+		"typescript": "^5.5.3"
+	},
+	"karin": {
+		"apps": [
+			"lib/apps"
+		],
+		"ts-apps": [
+			"src/apps"
+		],
+		"static": [
+			"resources"
+		],
+		"files": [
+			"config",
+			"resources"
+		]
+	},
+	"files": [
+		"/lib/**/*.js",
+		"/lib/**/*.d.ts",
+		"/config/*.yaml",
+		"resources",
+		"LICENSE",
+		"package.json",
+		"README.md"
+	],
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org"
+	}
 }

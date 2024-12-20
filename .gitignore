@@ -27,3 +27,5 @@ config/config/pm2.yaml
 index.js
 pnpm-workspace.yaml
 @karinjs/
+
+*.css.map

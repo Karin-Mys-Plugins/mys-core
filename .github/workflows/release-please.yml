@@ -18,7 +18,7 @@ jobs:
           # 设置发布类型为 Node.js
           release-type: node
           # 设置包名
-          package-name: karin-plugin-template-ts
+          package-name: karin-mys-core
           # 设置发起PR的默认分支
           default-branch: main
       # 检出代码

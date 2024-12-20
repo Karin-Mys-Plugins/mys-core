@@ -1,24 +1,34 @@
 {
-  "editor.detectIndentation": false,
-  "editor.tabSize": 2,
-  "editor.formatOnSave": true,
-  "editor.formatOnType": false,
-  "editor.formatOnPaste": true,
-  "editor.formatOnSaveMode": "file",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
-  },
-  "files.autoSave": "onFocusChange",
-  // 单引号
-  "javascript.preferences.quoteStyle": "single",
-  "typescript.preferences.quoteStyle": "single",
-  // 去掉分号
-  "javascript.format.semicolons": "remove",
-  "typescript.format.semicolons": "remove",
-  // 函数括号前面加空格
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
-  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
-  // 构造函数后面加空格
-  "typescript.format.insertSpaceAfterConstructor": true,
-  "javascript.format.insertSpaceAfterConstructor": true,
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": false,
+	"editor.formatOnPaste": true,
+	"editor.formatOnSaveMode": "file",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always"
+	},
+	"files.autoSave": "onFocusChange",
+	// 单引号
+	"javascript.preferences.quoteStyle": "single",
+	"typescript.preferences.quoteStyle": "single",
+	// 去掉分号
+	"javascript.format.semicolons": "remove",
+	"typescript.format.semicolons": "remove",
+	// 函数括号前面加空格
+	"javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+	"typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+	// 构造函数后面加空格
+	"typescript.format.insertSpaceAfterConstructor": true,
+	"javascript.format.insertSpaceAfterConstructor": true,
+	"liveSassCompile.settings.formats": [
+		{
+			"format": "compressed", // 可选：编译的 CSS 格式（expanded 或 compressed）
+			"extensionName": ".css", // 输出文件的扩展名
+			"savePath": null // 设置为 null 表示与 SCSS 文件相同路径
+		}
+	],
+	"liveSassCompile.settings.includeItems": [
+		"/resources/**/*.scss"
+	]
 }

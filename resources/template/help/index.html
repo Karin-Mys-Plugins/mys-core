@@ -1,0 +1,41 @@
+{{extend defaultLayout}}
+
+{{block 'css'}}
+<title>{{helpInfo.name}} @{{helpInfo.version}}</title>
+<link rel="stylesheet" type="text/css" href="{{pluResPath}}/template/help/index.css" />
+<style>
+	.container {
+		background-image: url({{helpBackgroud.path||defaultBackgroud}});
+	}
+</style>
+{{/block}}
+
+{{block 'main'}}
+<div class="help">
+	<div class="title">{{@helpInfo.name}}&nbsp;<strong>@{{helpInfo.version}}</strong></div>
+	<div class='desc'>&nbsp;&nbsp;&nbsp;&nbsp;{{@helpInfo.desc}}</div>
+	{{each helpInfo.commandGroups group}}
+	<div class="group-info">
+		<div class='title'>
+			{{@group.name}}
+			<div class='desc'>{{@group.desc}}</div>
+		</div>
+		<div class='commands'>
+			{{each group.commands command}}
+			<div class='item'>
+				{{if !command.image}}
+				<span class='icon' style='{{command.icon}}'></span>
+				{{else}}
+				<img class='icon-image' src='{{command.image}}' />
+				{{/if}}
+				<div class='info'>
+					<div class='name'>{{@command.name}}</div>
+					<div class='desc'>{{@command.desc||'暂无描述'}}</div>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+	{{/each}}
+</div>
+{{/block}}

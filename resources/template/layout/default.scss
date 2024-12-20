@@ -1,0 +1,41 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	user-select: none;
+}
+
+body {
+	color: rgb(255, 255, 255);
+	width: 600px;
+}
+
+.container {
+	background-color: rgb(60, 58, 58);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	padding-bottom: 40px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.copyright {
+	left: 0;
+	bottom: 0;
+	display: flex;
+	width: 100%;
+	font-size: 12px;
+	position: absolute;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 0 10px 0;
+
+	strong {
+		font-weight: bold;
+		font-size: 14px;
+		color: rgb(242, 192, 111);
+	}
+}

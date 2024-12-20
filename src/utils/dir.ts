@@ -1,11 +1,9 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from "url"
 
-/** 当前文件的绝对路径 */
-const filePath = fileURLToPath(import.meta.url).replace(/\\/g, '/')
-/** 插件包绝对路径 */
-const dirPath = path.resolve(filePath, '../../../')
-/** 插件包的名称 */
-const basename = path.basename(dirPath)
+export const getDirPath = (url: string | URL, r: number) => {
+	const filePath = fileURLToPath(url).replace(/\\/g, '/')
+	return path.resolve(filePath, '../'.repeat(r))
+}
 
-export { dirPath, basename }
+export const dirPath = getDirPath(import.meta.url, 3)
