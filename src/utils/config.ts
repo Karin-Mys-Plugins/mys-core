@@ -35,7 +35,7 @@ copyConfigSync(defConfig, dirConfig, ['.yaml'])
 /**
  * @description 配置文件
  */
-export const config = (): ConfigType => getConfig('config')
+export const cfg = (): ConfigType => getConfig('config')
 
 /**
  * @description 自定义帮助
