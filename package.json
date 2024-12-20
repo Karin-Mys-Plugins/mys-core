@@ -55,8 +55,9 @@
 		"/lib/**/*.d.ts",
 		"/config/**/*.yaml",
 		"/config/**/*.json",
-		"resources",
-		"/resources/**/*.!(scss)",
+		"/resources/**/*.png",
+		"/resources/**/*.css",
+		"/resources/**/*.html",
 		"LICENSE",
 		"package.json",
 		"README.md"
