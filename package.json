@@ -53,9 +53,10 @@
 	"files": [
 		"/lib/**/*.js",
 		"/lib/**/*.d.ts",
-		"/config/*.yaml",
+		"/config/**/*.yaml",
+		"/config/**/*.json",
 		"resources",
-		"resources/**/*.!(scss)",
+		"/resources/**/*.!(scss)",
 		"LICENSE",
 		"package.json",
 		"README.md"
