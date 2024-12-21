@@ -1,5 +1,5 @@
 import { Dialect, ModelAttributes } from '@/types'
-import { config, pkgName } from '@/utils'
+import { config } from '@/utils'
 import { basePath, mkdirSync } from 'node-karin'
 import sqlModel, { Model, DataTypes, Op, Sequelize } from 'sequelize'
 
@@ -28,7 +28,7 @@ export const sequelize = new class {
 				logging: false
 			})
 		} else {
-			const dbPath = `${basePath}/data/${pkgName}/db`
+			const dbPath = `${basePath}/data/${config.pkg.name}/db`
 
 			mkdirSync(dbPath)
 

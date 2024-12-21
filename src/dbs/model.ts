@@ -1,5 +1,5 @@
 import { Dialect, ModelAttributes } from '@/types'
-import { config, pkgName } from '@/utils'
+import { config } from '@/utils'
 import fs from 'fs'
 import { basePath, existsSync, json, logger, mkdirSync } from 'node-karin'
 import lodash from 'node-karin/lodash'
@@ -22,7 +22,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 		this.modelName = modelName
 		this.#modelSchema = modelSchema
 
-		this.dataPath = `${basePath}/data/${pkgName}/${this.modelName}`
+		this.dataPath = `${basePath}/data/${config.pkg.name}/${this.modelName}`
 		if (type) {
 			mkdirSync(this.dataPath)
 		}
