@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.5](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.4...v1.0.5) (2024-12-21)
+
+
+### Bug Fixes
+
+* add exchangeHandler ([1e7db59](https://github.com/Karin-Mys-Plugins/mys-core/commit/1e7db594270af34fb520bc98058f99155e01aae9))
+* exports ([7dffedb](https://github.com/Karin-Mys-Plugins/mys-core/commit/7dffedb6c5a3bf64fb804a74d2974ae3c1c1ad96))
+* import error ([096b07f](https://github.com/Karin-Mys-Plugins/mys-core/commit/096b07f5c0fc8ea6025ee5a52266f5abf19f119f))
+
 ## [1.0.4](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.3...v1.0.4) (2024-12-20)
 
 
