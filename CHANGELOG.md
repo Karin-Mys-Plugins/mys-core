@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.6](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.5...v1.0.6) (2024-12-21)
+
+
+### Bug Fixes
+
+* config ([67fcdab](https://github.com/Karin-Mys-Plugins/mys-core/commit/67fcdab0cc24181edaf8269cb3b3e3b4f9dca0bb))
+* config.pkg ([8752cc1](https://github.com/Karin-Mys-Plugins/mys-core/commit/8752cc19972a5fa230daa507574ef2804cee3164))
+
 ## [1.0.5](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.4...v1.0.5) (2024-12-21)
 
 
