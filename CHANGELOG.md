@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.7...v1.0.8) (2024-12-21)
+
+
+### Bug Fixes
+
+* delete ltuid prem ([ac698cf](https://github.com/Karin-Mys-Plugins/mys-core/commit/ac698cffa1c6c6befb449fd0967c1d94d8ae9485))
+
 ## [1.0.7](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.6...v1.0.7) (2024-12-21)
 
 
