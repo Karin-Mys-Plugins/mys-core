@@ -1,10 +1,10 @@
 import { BaseMysResDataType, MysApiInfo, MysType, requestMethod, UidInfo } from '@/types'
+import { common } from '@/utils'
 import md5 from 'md5'
 import { handler, logger } from 'node-karin'
 import axios, { AxiosHeaders, AxiosRequestConfig } from 'node-karin/axios'
 import lodash from 'node-karin/lodash'
 import { MysApp } from '.'
-import { common } from '@/utils'
 
 export class defineMysApi<
 	R extends BaseMysResDataType & { [key: string]: any } | undefined = undefined,
@@ -36,7 +36,7 @@ export class defineMysApi<
 		return `Karin-${md5(this.uidInfo.ltuid).substring(0, 5)}`
 	}
 
-	async request (data?: D, checkCode: boolean = true): Promise<R> {
+	async request (data: D, checkCode: boolean = true): Promise<R> {
 		const Url = this.#apiInfo.url(this, data)
 		const Body = this.#apiInfo.body?.(this, data)
 		const Headers = new AxiosHeaders(this.#apiInfo.headers?.(this, {

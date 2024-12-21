@@ -120,3 +120,55 @@ export const getUserFullInfo = (uidInfo: {
 	url: (self, data) => new URL(`${MysHosts.new_web_api}user/wapi/getUserFullInfo?gids=2`),
 	headers: CookieHeaders
 }, uidInfo)
+
+export const miyolive_actId = (uid: string) => new defineMysApi<
+	BaseMysResDataType & {
+		data: {
+			list: {
+				post: {
+					post?: {
+						structured_content: string
+					}
+				}
+			}[]
+		}
+	}
+>({
+	method: requestMethod.GET,
+	url: (self, data) => new URL(`${MysHosts.web_api}painter/api/user_instant/list?offset=0&size=20&uid=${uid}`),
+	headers: NoHeaders
+})
+
+export const miyolive_index = (actid: string) => new defineMysApi<
+	BaseMysResDataType & {
+		data: {
+			live: {
+				title: string
+				is_end: boolean
+				remain: number
+				code_ver: string
+			}
+			template: string
+		}
+	}
+>({
+	method: requestMethod.GET,
+	url: (self, data) => new URL(`${MysHosts.web_api}event/miyolive/index`),
+	headers: (self, options) => ({ 'x-rpc-act_id': actid })
+})
+
+export const miyolive_refreshCode = (actid: string) => new defineMysApi<
+	BaseMysResDataType & {
+		data: {
+			code_list: {
+				code: string,
+				to_get_time: number
+			}[]
+		}
+	},
+	{ code_ver: string }
+>({
+	method: requestMethod.GET,
+	url: (self, data) => new URL(`${MysHosts.web_api}event/miyolive/refreshCode?version=${data!.code_ver}&time=${Math.floor(Date.now() / 1000)}`),
+	headers: (self, options) => ({ 'x-rpc-act_id': actid })
+})

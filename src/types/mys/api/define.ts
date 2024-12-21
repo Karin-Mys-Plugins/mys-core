@@ -19,10 +19,10 @@ export interface MysApiInfo<
 	D extends { [key: string]: any } = {}
 > {
 	method: requestMethod
-	url: (self: defineMysApi<R, D>, data?: D) => URL
-	body?: (self: defineMysApi<R, D>, data?: D) => any
-	headers: (self: defineMysApi<R, D>, data?: {
-		query: string, body: any
+	url: (self: defineMysApi<R, D>, data: D) => URL
+	body?: (self: defineMysApi<R, D>, data: D) => any
+	headers: (self: defineMysApi<R, D>, data: {
+		query: string, body: any, data?: D
 	}) => Record<string, string>
 }
 

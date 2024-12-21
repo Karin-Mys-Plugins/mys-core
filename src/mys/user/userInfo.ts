@@ -128,7 +128,7 @@ export const refreshUid = async (options: {
 	uids: CoreRefreshUidHandlerData,
 	message: string
 }> => {
-	const res = await getUserGameRolesByCookie(options).request()
+	const res = await getUserGameRolesByCookie(options).request({})
 
 	let message = ''
 	const uidList = { data: {}, names: {} }

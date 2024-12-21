@@ -69,7 +69,7 @@ const bingCookie = async (userId: string, cookie: string, Serv?: MysType): Promi
 		const userFullInfo = await getUserFullInfo({
 			type: servType, ltuid,
 			cookie: cookieStr,
-		}).request()
+		}).request({})
 
 		if (userFullInfo?.data?.user_info) {
 			if (userFullInfo.data.user_info.uid) {
