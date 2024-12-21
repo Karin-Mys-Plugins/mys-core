@@ -19,9 +19,9 @@ export class Config {
 	dirConfig: string
 	/** @description 默认配置文件 */
 	defConfig: string
-	constructor (defPath: string, dirPath: string) {
-		this.dirConfig = dirPath
-		this.defConfig = defPath
+	constructor (dirPath: string, pkgName: string) {
+		this.dirConfig = `${basePath}/${pkgName}/config`
+		this.defConfig = `${dirPath}/config/config`
 
 		/** @description 初始化配置文件 */
 		copyConfigSync(this.defConfig, this.dirConfig, ['.yaml'])
@@ -42,7 +42,7 @@ export class Config {
 	}
 }
 
-const CoreConfig = new Config(`${dirPath}/config/config`, `${basePath}/${pkg.name}/config`)
+const CoreConfig = new Config(dirPath, pkg.name)
 
 /**
  * @description 配置文件
