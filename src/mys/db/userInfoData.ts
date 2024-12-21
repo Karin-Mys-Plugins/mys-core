@@ -1,5 +1,5 @@
 import { MysCoreDb, Column, ArrayColumn } from '@/dbs'
-import { UserInfoDataType } from '@/types'
+import { baseUserInfoDataType } from '@/types'
 
 export const baseUserInfoDataSchema = {
 	user_id: Column('STRING', {
@@ -9,4 +9,4 @@ export const baseUserInfoDataSchema = {
 	stuids: ArrayColumn('stuids')
 }
 
-export const userInfoData = new MysCoreDb<UserInfoDataType>('userInfoData', baseUserInfoDataSchema).Init()
+export const userInfoData = new MysCoreDb<baseUserInfoDataType>('userInfoData', baseUserInfoDataSchema).Init()

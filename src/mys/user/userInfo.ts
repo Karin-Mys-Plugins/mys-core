@@ -1,12 +1,12 @@
 import { common } from '@/utils'
 import { userInfoData, mysUserInfoData } from '../db'
-import { CoreRefreshUidData, MysType, MysUserInfoDataType, UserInfoDataType, UserInfoLtuidMapType, requestMethod } from '@/types'
+import { CoreRefreshUidData, MysType, MysUserInfoDataType, baseUserInfoDataType, UserInfoLtuidMapType, requestMethod } from '@/types'
 import { getCookieTokenBySToken, getUserGameRolesByCookie } from '..'
 
-export class UserInfo {
-	user_id: UserInfoDataType['user_id']
-	#ltuids: UserInfoDataType['ltuids'] = []
-	#stuids: UserInfoDataType['stuids'] = []
+export class baseUserInfo {
+	user_id: baseUserInfoDataType['user_id']
+	#ltuids: baseUserInfoDataType['ltuids'] = []
+	#stuids: baseUserInfoDataType['stuids'] = []
 
 	#ltuidMap = new Map<string, UserInfoLtuidMapType>()
 
@@ -22,16 +22,7 @@ export class UserInfo {
 		return Object.freeze(this.#stuids)
 	}
 
-	static async create (user_id: string) {
-		const userInfo = new UserInfo(user_id)
-
-		const UserInfoData = await userInfoData.findByPk(user_id, true)
-		await userInfo.#initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
-
-		return userInfo
-	}
-
-	async #initMysUserInfoData (ltuids: string[], stuids: string[]) {
+	async initMysUserInfoData (ltuids: string[], stuids: string[]) {
 		this.#ltuidMap.clear()
 		this.#ltuids = ltuids
 		this.#stuids = stuids
@@ -54,32 +45,42 @@ export class UserInfo {
 	getLtuidInfo (ltuid: string) {
 		return Object.freeze(this.#ltuidMap.get(ltuid))
 	}
-
-	async setUserInfoData (data: Partial<UserInfoDataType>) {
-		await userInfoData.update(this.user_id, {
-			...await userInfoData.findByPk(this.user_id, true),
-			...data
-		})
-	}
-
-	async setMysUserInfoData (ltuid: string, data: Partial<MysUserInfoDataType>) {
-		await mysUserInfoData.update(ltuid, {
-			...await mysUserInfoData.findByPk(ltuid, true),
-			...data
-		})
-	}
-
-	async refresh () {
-		const UserInfoData = await userInfoData.findByPk(this.user_id, true)
-		await this.#initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
-	}
 }
+
+export const UserInfo = Object.freeze({
+	create: async (user_id: string) => {
+		const userInfo = new baseUserInfo(user_id)
+
+		const UserInfoData = await userInfoData.findByPk(user_id, true)
+		await userInfo.initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
+
+		return userInfo
+	},
+	refresh: async (userInfo: baseUserInfo) => {
+		const UserInfoData = await userInfoData.findByPk(userInfo.user_id, true)
+		await userInfo.initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
+	}
+})
+
+export const setUserInfoData = async (
+	user_id: string, data: Partial<baseUserInfoDataType>
+) => await userInfoData.update(user_id, {
+	...await userInfoData.findByPk(user_id, true),
+	...data
+})
+
+export const setMysUserInfoData = async (
+	ltuid: string, data: Partial<MysUserInfoDataType>
+) => await mysUserInfoData.update(ltuid, {
+	...await mysUserInfoData.findByPk(ltuid, true),
+	...data
+})
 
 export const updataCookie = async (
 	stokenParams: {
-		ltuid: string,
-		stoken: string,
-		mid: string,
+		ltuid: string
+		stoken: string
+		mid: string
 		ltoken: string
 	},
 	serv: MysType

@@ -3,7 +3,7 @@ import { config } from '@/utils'
 import { Help } from '@/help'
 
 export const help = karin.command(
-	/mys帮助/i,
+	/^#?mys帮助/i,
 	async (e) => {
 		const image = await Help.render(config.pkg.name)
 		if (!image) return true

@@ -1,4 +1,14 @@
-import { UserInfo, fetchQRcode, getTokenByGameToken, getUserFullInfo, queryQRcode, refreshUid, updataCookie } from '@/mys'
+import {
+	UserInfo,
+	fetchQRcode,
+	getTokenByGameToken,
+	getUserFullInfo,
+	queryQRcode,
+	refreshUid,
+	setMysUserInfoData,
+	setUserInfoData,
+	updataCookie
+} from '@/mys'
 import { CoreRefreshUidData, MysType } from '@/types'
 import { common } from '@/utils'
 import karin, { logger, segment, } from 'node-karin'
@@ -82,11 +92,11 @@ const bingCookie = async (userId: string, cookie: string, Serv?: MysType): Promi
 	}
 
 	const userInfo = await UserInfo.create(userId)
-	await userInfo.setUserInfoData({
+	await setUserInfoData(userId, {
 		...uidList.uids.data,
 		ltuids: lodash.uniq([...userInfo.ltuids, cookieParams.ltuid])
 	})
-	await userInfo.setMysUserInfoData(cookieParams.ltuid, {
+	await setMysUserInfoData(cookieParams.ltuid, {
 		...cookieParams, type: servType
 	})
 	logger.mark(`[${userId}] 保存Cookie成功 [ltuid:${cookieParams.ltuid}]`)
@@ -126,10 +136,10 @@ const bingStoken = async (userId: string, stoken: string, Serv?: MysType): Promi
 	}
 
 	const userInfo = await UserInfo.create(userId)
-	await userInfo.setUserInfoData({
+	await setUserInfoData(userId, {
 		stuids: lodash.uniq([...userInfo.stuids, stokenParams.ltuid])
 	})
-	await userInfo.setMysUserInfoData(stokenParams.ltuid, {
+	await setMysUserInfoData(stokenParams.ltuid, {
 		...stokenParams, type: servType
 	})
 
@@ -215,12 +225,13 @@ export const MiHoYoLoginQRCode = karin.command(
 			return true
 		}
 
-		const userInfo = await UserInfo.create(e.userId)
-
-		const res = await getTokenByGameToken().request({ account_id: parseInt(data.uid), game_token: data.token })
+		const res = await getTokenByGameToken().request({
+			account_id: parseInt(data.uid), game_token: data.token
+		})
 		if (!res) {
 			e.reply('获取Token失败', { at: true })
 			QRCodes.delete(e.userId)
+
 			return true
 		}
 
