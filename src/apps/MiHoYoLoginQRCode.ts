@@ -1,5 +1,5 @@
 import { UserInfo, fetchQRcode, getTokenByGameToken, getUserFullInfo, queryQRcode, refreshUid, updataCookie } from '@/mys'
-import { CoreRefreshUidHandlerData, MysType } from '@/types'
+import { CoreRefreshUidData, MysType } from '@/types'
 import { common } from '@/utils'
 import karin, { logger, segment, } from 'node-karin'
 import lodash from 'node-karin/lodash'
@@ -44,7 +44,7 @@ const bingCookie = async (userId: string, cookie: string, Serv?: MysType): Promi
 	const cookieStr = common.objToStr(cookieParams, ';')
 
 	let uidList: {
-		uids: CoreRefreshUidHandlerData
+		uids: CoreRefreshUidData
 		message: string
 	} = {
 		uids: { data: {}, names: {} },

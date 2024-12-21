@@ -1,8 +1,7 @@
 import { common } from '@/utils'
 import { userInfoData, mysUserInfoData } from '../db'
-import { CoreRefreshUidHandlerData, MysType, MysUserInfoDataType, UserInfoDataType, UserInfoLtuidMapType, requestMethod } from '@/types'
+import { CoreRefreshUidData, MysType, MysUserInfoDataType, UserInfoDataType, UserInfoLtuidMapType, requestMethod } from '@/types'
 import { getCookieTokenBySToken, getUserGameRolesByCookie } from '..'
-import { handler } from 'node-karin'
 
 export class UserInfo {
 	user_id: UserInfoDataType['user_id']
@@ -120,12 +119,17 @@ export const updataCookie = async (
 	}
 }
 
+const refreshFucMap = new Map<string, (uidList: CoreRefreshUidData) => void>()
+export const registerRefreshFuc = (key: string, fn: (uidList: CoreRefreshUidData) => void) => {
+	refreshFucMap.set(key, fn)
+}
+
 export const refreshUid = async (options: {
 	type: MysType
 	ltuid: string
 	cookie: string
 }): Promise<{
-	uids: CoreRefreshUidHandlerData,
+	uids: CoreRefreshUidData,
 	message: string
 }> => {
 	const res = await getUserGameRolesByCookie(options).request({})
@@ -133,7 +137,7 @@ export const refreshUid = async (options: {
 	let message = ''
 	const uidList = { data: {}, names: {} }
 	if (res?.retcode === 0) {
-		await handler.call('mys_core.refresh.uid', uidList)
+		refreshFucMap.forEach(fn => fn(uidList))
 	} else if (res?.retcode === -100) {
 		message = "Cookie已失效，请重新#扫码登录或#刷新Cookie！"
 	} else {

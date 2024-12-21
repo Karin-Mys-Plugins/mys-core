@@ -1,9 +1,9 @@
 {
 	"name": "karin-mys-core",
 	"version": "1.0.4",
-	"author": "Lain",
+	"author": "babanbang",
 	"type": "module",
-	"description": "karin plugin template",
+	"description": "karin-mys-core",
 	"homepage": "https://github.com/Karin-Mys-Plugins/mys-core",
 	"bugs": {
 		"url": "https://github.com/Karin-Mys-Plugins/mys-core/issues"
@@ -12,6 +12,35 @@
 		"type": "git",
 		"url": "git+https://github.com/Karin-Mys-Plugins/mys-core.git"
 	},
+	"exports": {
+		"./dbs": {
+			"import": "./lib/dbs/index.js",
+			"require": "./lib/dbs/index.js",
+			"types": "./lib/dbs/index.d.ts"
+		},
+		"./help": {
+			"import": "./lib/help/index.js",
+			"require": "./lib/help/index.js",
+			"types": "./lib/help/index.d.ts"
+		},
+		"./mys": {
+			"import": "./lib/mys/index.js",
+			"require": "./lib/mys/index.js",
+			"types": "./lib/mys/index.d.ts"
+		},
+		"./utils": {
+			"import": "./lib/utils/index.js",
+			"require": "./lib/utils/index.js",
+			"types": "./lib/utils/index.d.ts"
+		},
+		"./types": {
+			"import": "./lib/types/index.js",
+			"require": "./lib/types/index.js",
+			"types": "./lib/types/index.d.ts"
+		}
+	},
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
 	"scripts": {
 		"build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
 		"pub": "npm publish --access public"
