@@ -2,7 +2,6 @@ import { dirPath } from '@/utils'
 import { ConfigType, pluginHelpInfoDataType } from '@/types'
 import {
 	watch,
-	logger,
 	basePath,
 	filesByExt,
 	copyConfigSync,
@@ -13,42 +12,44 @@ import lodash from 'node-karin/lodash'
 /**
  * @description package.json
  */
-export const pkg = () => requireFileSync(`${dirPath}/package.json`)
+export const pkg = requireFileSync(`${dirPath}/package.json`)
 
-export const pkgName = pkg().name
+export class Config {
+	/** @description 用户配置文件 */
+	dirConfig: string
+	/** @description 默认配置文件 */
+	defConfig: string
+	constructor (defPath: string, dirPath: string) {
+		this.dirConfig = dirPath
+		this.defConfig = defPath
 
-const dirConfig = `${basePath}/${pkgName}/config`
-const defConfig = `${dirPath}/config/config`
+		/** @description 初始化配置文件 */
+		copyConfigSync(this.defConfig, this.dirConfig, ['.yaml'])
+	}
 
-const getConfig = (name: string) => {
-	const def = requireFileSync(`${defConfig}/${name}.yaml`)
-	const cof = requireFileSync(`${dirConfig}/${name}.yaml`)
+	get (name: string) {
+		const def = requireFileSync(`${this.defConfig}/${name}.yaml`)
+		const cof = requireFileSync(`${this.dirConfig}/${name}.yaml`)
 
-	return lodash.merge(def, cof)
+		return lodash.merge(def, cof)
+	}
+
+	watch (fn: (file: string) => (old: any, now: any) => void) {
+		setTimeout(() => {
+			const list = filesByExt(this.dirConfig, '.yaml', 'abs')
+			list.forEach(file => watch(file, fn(file)))
+		}, 2000)
+	}
 }
 
-/**
- * @description 初始化配置文件
- */
-copyConfigSync(defConfig, dirConfig, ['.yaml'])
+const CoreConfig = new Config(`${dirPath}/config/config`, `${basePath}/${pkg.name}/config`)
 
 /**
  * @description 配置文件
  */
-export const cfg = (): ConfigType => getConfig('config')
+export const cfg = (): ConfigType => CoreConfig.get('config')
 
 /**
  * @description 自定义帮助
  */
-export const help = (): pluginHelpInfoDataType => getConfig('help')
-
-/**
- * @description 监听配置文件
- */
-setTimeout(() => {
-	const list = filesByExt(dirConfig, '.yaml', 'abs')
-	list.forEach(file => watch(file, (old, now) => {
-		logger.info('旧数据:', old)
-		logger.info('新数据:', now)
-	}))
-}, 2000)
+export const help = (): pluginHelpInfoDataType => CoreConfig.get('help')
