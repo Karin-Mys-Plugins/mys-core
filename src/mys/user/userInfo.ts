@@ -1,6 +1,6 @@
 import { common } from '@/utils'
 import { userInfoData, mysUserInfoData } from '../db'
-import { CoreRefreshUidData, MysType, MysUserInfoDataType, baseUserInfoDataType, UserInfoLtuidMapType, requestMethod } from '@/types'
+import { CoreRefreshUidData, MysType, MysUserInfoDataType, baseUserInfoDataType, requestMethod } from '@/types'
 import { getCookieTokenBySToken, getUserGameRolesByCookie } from '..'
 
 export class baseUserInfo {
@@ -8,7 +8,7 @@ export class baseUserInfo {
 	#ltuids: baseUserInfoDataType['ltuids'] = []
 	#stuids: baseUserInfoDataType['stuids'] = []
 
-	#ltuidMap = new Map<string, UserInfoLtuidMapType>()
+	#ltuidMap = new Map<string, MysUserInfoDataType>()
 
 	constructor (user_id: string) {
 		this.user_id = user_id
@@ -31,15 +31,10 @@ export class baseUserInfo {
 
 		const MysUserInfoDataList = await mysUserInfoData.findAllByPks(id_list)
 		MysUserInfoDataList.forEach((MysUserInfoData) => {
-			const item: UserInfoLtuidMapType = { ...MysUserInfoData, perm: 0 }
-			if (ltuids.some(ltuid => ltuid === item.ltuid)) {
-				item.perm += 1
-			}
-			if (stuids.some(stuid => stuid === item.ltuid)) {
-				item.perm += 2
-			}
-			this.#ltuidMap.set(item.ltuid, item)
+			this.#ltuidMap.set(MysUserInfoData.ltuid, MysUserInfoData)
 		})
+
+		return this
 	}
 
 	getLtuidInfo (ltuid: string) {
@@ -52,9 +47,8 @@ export const UserInfo = Object.freeze({
 		const userInfo = new baseUserInfo(user_id)
 
 		const UserInfoData = await userInfoData.findByPk(user_id, true)
-		await userInfo.initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
 
-		return userInfo
+		return await userInfo.initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
 	},
 	refresh: async (userInfo: baseUserInfo) => {
 		const UserInfoData = await userInfoData.findByPk(userInfo.user_id, true)
