@@ -1,12 +1,12 @@
 import { Dialect, ModelAttributes } from '@/types'
 import { config, pkgName } from '@/utils'
 import fs from 'fs'
-import { basePath, exists, json, logger, mkdirSync } from 'node-karin'
+import { basePath, existsSync, json, logger, mkdirSync } from 'node-karin'
 import lodash from 'node-karin/lodash'
-import { Model, ModelStatic, checkDialect, sequelize } from './sequelize'
+import { Model, checkDialect, sequelize, sqlModel } from './sequelize'
 
 export class MysCoreDb<T extends { [key: string]: any }> {
-	declare model: ModelStatic<Model<any, any>>
+	declare model: sqlModel.ModelStatic<Model<any, any>>
 
 	modelName: string
 	#modelSchema: ModelAttributes<Model>
@@ -22,8 +22,10 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 		this.modelName = modelName
 		this.#modelSchema = modelSchema
 
-		this.dataPath = `${basePath}/data${pkgName}/${this.modelName}`
-		mkdirSync(this.dataPath)
+		this.dataPath = `${basePath}/data/${pkgName}/${this.modelName}`
+		if (type) {
+			mkdirSync(this.dataPath)
+		}
 	}
 
 	Init () {
@@ -96,7 +98,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 	async findByPk (pk: string, create: boolean = false): Promise<T | undefined> {
 		if (checkDialect(config.cfg().dialect) === 'sqlite' && this.#useType) {
 			const path = this.userPath(pk)
-			if (!exists(path)) {
+			if (!existsSync(path)) {
 				if (create) {
 					const data = this.schemaToJSON(pk)
 					if (this.#useType === 'dir') {
@@ -131,7 +133,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 			const result: T[] = []
 			pks.forEach((pk) => {
 				const path = this.userPath(pk)
-				if (exists(path)) {
+				if (existsSync(path)) {
 					if (this.#useType === 'dir') {
 						result.push(this.#readDirSync(pk))
 					} else {

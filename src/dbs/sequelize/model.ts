@@ -1,9 +1,9 @@
 import { Dialect, ModelAttributes } from '@/types'
 import { config, pkgName } from '@/utils'
 import { basePath, mkdirSync } from 'node-karin'
-import { DataTypes, Model, ModelAttributeColumnOptions, ModelStatic, Op, Sequelize } from 'sequelize'
+import sqlModel, { Model, DataTypes, Op, Sequelize } from 'sequelize'
 
-export { Model, ModelStatic, Op }
+export { sqlModel, Model, Op }
 
 export const checkDialect = (dialect: string) => {
 	if (dialect === Dialect.postgres) {
@@ -45,7 +45,7 @@ export const sequelize = new class {
 
 export const Column = (
 	type: keyof typeof DataTypes,
-	opt: { def?: any, option?: Partial<ModelAttributeColumnOptions<Model>> } = {}
+	opt: { def?: any, option?: Partial<sqlModel.ModelAttributeColumnOptions<Model>> } = {}
 ) => {
 	const { def = '', option = {} } = opt
 	return {
@@ -107,7 +107,7 @@ export const JsonColumn = (
 }
 
 export const InitDb = async<T extends Model> (
-	model: ModelStatic<T>,
+	model: sqlModel.ModelStatic<T>,
 	COLUMNS: ModelAttributes<T>
 ) => {
 	model.init(COLUMNS as any, {
@@ -124,7 +124,7 @@ export const InitDb = async<T extends Model> (
 			await queryInterface.addColumn(model.name, key, COLUMNS[key])
 			if (typeof COLUMNS[key] === 'string') continue
 
-			const defaultValue = (COLUMNS[key] as ModelAttributeColumnOptions<T>).defaultValue
+			const defaultValue = (COLUMNS[key] as sqlModel.ModelAttributeColumnOptions<T>).defaultValue
 			if (defaultValue !== undefined) {
 				await model.update({ [key as any]: defaultValue }, { where: {} })
 			}
