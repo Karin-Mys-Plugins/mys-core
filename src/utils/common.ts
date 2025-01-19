@@ -15,12 +15,6 @@ export const random = (min: number, max: number) => lodash.random(min, max)
 export const randomString = (length: number) => lodash.sampleSize('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', length).join('')
 
 /**
- * 睡眠函数
- * @param ms - 毫秒
- */
-export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-
-/**
  * 使用moment返回时间
  * @param format - 格式
  */

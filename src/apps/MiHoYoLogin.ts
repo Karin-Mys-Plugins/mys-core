@@ -5,13 +5,11 @@ import {
 	getUserFullInfo,
 	queryQRcode,
 	refreshUid,
-	setMysUserInfoData,
-	setUserInfoData,
 	updataCookie
 } from '@/mys'
 import { CoreRefreshUidData, MysType } from '@/types'
 import { common } from '@/utils'
-import karin, { logger, segment, } from 'node-karin'
+import karin, { logger, segment, common as karinCommon } from 'node-karin'
 import lodash from 'node-karin/lodash'
 import QR from 'qrcode'
 
@@ -92,12 +90,13 @@ const bingCookie = async (userId: string, cookie: string, Serv?: MysType): Promi
 	}
 
 	const userInfo = await UserInfo.create(userId)
-	await setUserInfoData(userId, {
+	await userInfo.setUserInfoData({
 		...uidList.uids.data,
 		ltuids: lodash.uniq([...userInfo.ltuids, cookieParams.ltuid])
 	})
-	await setMysUserInfoData(cookieParams.ltuid, {
-		...cookieParams, type: servType
+	await userInfo.setMysUserInfoData(cookieParams.ltuid, {
+		type: servType,
+		cookie: common.objToStr(cookieParams, ';')
 	})
 	logger.mark(`[${userId}] 保存Cookie成功 [ltuid:${cookieParams.ltuid}]`)
 
@@ -136,10 +135,10 @@ const bingStoken = async (userId: string, stoken: string, Serv?: MysType): Promi
 	}
 
 	const userInfo = await UserInfo.create(userId)
-	await setUserInfoData(userId, {
+	await userInfo.setUserInfoData({
 		stuids: lodash.uniq([...userInfo.stuids, stokenParams.ltuid])
 	})
-	await setMysUserInfoData(stokenParams.ltuid, {
+	await userInfo.setMysUserInfoData(stokenParams.ltuid, {
 		...stokenParams, type: servType
 	})
 
@@ -188,7 +187,7 @@ export const MiHoYoLoginQRCode = karin.command(
 		let data, Scanned
 		const ticket = QRcode.data.url.split('ticket=')[1]
 		for (let n = 1; n < 60; n++) {
-			await common.sleep(5000)
+			await karinCommon.sleep(5000)
 			try {
 				const res = await queryQRcode().request({ device, ticket })
 				if (!res) continue

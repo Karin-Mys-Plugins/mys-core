@@ -1,7 +1,7 @@
 import { defineMysApi } from '@/mys'
 import { MysType } from '.'
 
-export enum requestMethod {
+export const enum requestMethod {
 	GET = 'GET',
 	POST = 'POST'
 }

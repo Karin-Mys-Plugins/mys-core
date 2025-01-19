@@ -1,18 +1,18 @@
-import { dirPath } from '@/utils'
 import { ConfigType, pluginHelpInfoDataType } from '@/types'
+import { CoreDirPath } from '@/utils'
 import {
-	watch,
 	basePath,
-	filesByExt,
 	copyConfigSync,
+	filesByExt,
 	requireFileSync,
+	watch,
 } from 'node-karin'
 import lodash from 'node-karin/lodash'
 
 /**
  * @description package.json
  */
-export const pkg = requireFileSync(`${dirPath}/package.json`)
+export const pkg = requireFileSync(`${CoreDirPath}/package.json`)
 
 export class Config {
 	/** @description 用户配置文件 */
@@ -42,7 +42,7 @@ export class Config {
 	}
 }
 
-const CoreConfig = new Config(dirPath, pkg.name)
+const CoreConfig = new Config(CoreDirPath, pkg.name)
 
 /**
  * @description 配置文件

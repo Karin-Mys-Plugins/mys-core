@@ -1,6 +1,6 @@
 import Model from 'sequelize'
 
-export enum Dialect {
+export const enum Dialect {
 	sqlite = 'sqlite',
 	postgres = 'postgres',
 }

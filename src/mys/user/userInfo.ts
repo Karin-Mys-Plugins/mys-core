@@ -1,14 +1,15 @@
+import { CoreRefreshUidData, MysCoreReturnType, MysType, MysUserInfoDataType, baseUserInfoDataType, requestMethod } from '@/types'
 import { common } from '@/utils'
-import { userInfoData, mysUserInfoData } from '../db'
-import { CoreRefreshUidData, MysType, MysUserInfoDataType, baseUserInfoDataType, requestMethod } from '@/types'
-import { getCookieTokenBySToken, getUserGameRolesByCookie } from '..'
+import { getCookieTokenBySToken, getUserGameRolesByCookie } from '../api'
+import { mysUserInfoData, userInfoData } from '../db'
 
 export class baseUserInfo {
 	user_id: baseUserInfoDataType['user_id']
 	#ltuids: baseUserInfoDataType['ltuids'] = []
 	#stuids: baseUserInfoDataType['stuids'] = []
 
-	#ltuidMap = new Map<string, MysUserInfoDataType>()
+	declare UserInfo: MysCoreReturnType<baseUserInfoDataType>
+	#ltuidMap = new Map<string, MysCoreReturnType<MysUserInfoDataType>>()
 
 	constructor (user_id: string) {
 		this.user_id = user_id
@@ -22,7 +23,10 @@ export class baseUserInfo {
 		return Object.freeze(this.#stuids)
 	}
 
-	async initMysUserInfoData (ltuids: string[], stuids: string[]) {
+	async initMysUserInfoData (UserInfoData: MysCoreReturnType<baseUserInfoDataType>) {
+		this.UserInfo = UserInfoData
+		const { ltuids, stuids } = UserInfoData
+
 		this.#ltuidMap.clear()
 		this.#ltuids = ltuids
 		this.#stuids = stuids
@@ -40,6 +44,20 @@ export class baseUserInfo {
 	getLtuidInfo (ltuid: string) {
 		return Object.freeze(this.#ltuidMap.get(ltuid))
 	}
+
+	async setUserInfoData (data: any) {
+		await this.UserInfo._save(data)
+	}
+
+	async setMysUserInfoData (ltuid: string, data: any) {
+		let MysUserInfo = this.#ltuidMap.get(ltuid)
+		if (!MysUserInfo) {
+			MysUserInfo = await mysUserInfoData.findByPk(ltuid, true)
+		}
+
+		await MysUserInfo._save(data)
+		this.#ltuidMap.set(ltuid, { ...MysUserInfo, ...data })
+	}
 }
 
 export const UserInfo = Object.freeze({
@@ -48,26 +66,12 @@ export const UserInfo = Object.freeze({
 
 		const UserInfoData = await userInfoData.findByPk(user_id, true)
 
-		return await userInfo.initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
+		return await userInfo.initMysUserInfoData(UserInfoData)
 	},
 	refresh: async (userInfo: baseUserInfo) => {
 		const UserInfoData = await userInfoData.findByPk(userInfo.user_id, true)
-		await userInfo.initMysUserInfoData(UserInfoData.ltuids, UserInfoData.stuids)
+		await userInfo.initMysUserInfoData(UserInfoData)
 	}
-})
-
-export const setUserInfoData = async (
-	user_id: string, data: Partial<baseUserInfoDataType>
-) => await userInfoData.update(user_id, {
-	...await userInfoData.findByPk(user_id, true),
-	...data
-})
-
-export const setMysUserInfoData = async (
-	ltuid: string, data: Partial<MysUserInfoDataType>
-) => await mysUserInfoData.update(ltuid, {
-	...await mysUserInfoData.findByPk(ltuid, true),
-	...data
 })
 
 export const updataCookie = async (
@@ -115,7 +119,7 @@ export const updataCookie = async (
 }
 
 const refreshFucMap = new Map<string, (uidList: CoreRefreshUidData) => void>()
-export const registerRefreshFuc = (key: string, fn: (uidList: CoreRefreshUidData) => void) => {
+export const registerRefreshUidFuc = (key: string, fn: (uidList: CoreRefreshUidData) => void) => {
 	refreshFucMap.set(key, fn)
 }
 

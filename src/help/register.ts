@@ -1,7 +1,13 @@
-import { HelpInfoCommand, HelpInfoCommandGroup, pluginHelpInfoType, pluginHelpInfoDataType } from '@/types'
-import { dirPath } from '@/utils'
+import {
+	HelpInfoCommand,
+	HelpInfoCommandGroup,
+	RenderTempleType,
+	pluginHelpInfoDataType,
+	pluginHelpInfoType
+} from '@/types'
+import { CoreDirPath, renderTemplate } from '@/utils'
 import fs from 'fs'
-import { karin, logger } from 'node-karin'
+import { logger } from 'node-karin'
 import lodash from 'node-karin/lodash'
 
 export const Help = new class {
@@ -94,15 +100,10 @@ export const Help = new class {
 			})
 		}
 
-		return await karin.render({
-			name: name || plugin,
-			file: `${dirPath}/resources/template/help/index.html`,
-			data: {
-				defaultLayout: `${dirPath}/resources/template/layout/default.html`,
-				pluginName: plugin,
-				helpInfo,
-				helpBackgroud,
-				defaultBackgroud: `${dirPath}/resources/image/help/background/default.png`
+		return await renderTemplate(RenderTempleType.Help, {
+			name, plugin, data: {
+				helpInfo, helpBackgroud,
+				defaultBackgroud: `${CoreDirPath}/resources/image/help/background/default.png`
 			}
 		})
 	}

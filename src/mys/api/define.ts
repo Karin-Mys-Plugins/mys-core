@@ -55,9 +55,13 @@ export class defineMysApi<
 		let response: any = undefined
 		try {
 			if (this.#apiInfo.method === requestMethod.GET) {
-				response = await axios.get(params.url!)
+				response = await axios.get(params.url!, {
+					headers: params.headers
+				})
 			} else if (this.#apiInfo.method === requestMethod.POST) {
-				response = await axios.post(params.url!)
+				response = await axios.post(params.url!, params.data, {
+					headers: params.headers
+				})
 			} else {
 				response = axios.request(params)
 			}

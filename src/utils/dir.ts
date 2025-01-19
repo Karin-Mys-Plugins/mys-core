@@ -6,4 +6,4 @@ export const getDirPath = (url: string | URL, r: number) => {
 	return path.resolve(filePath, '../'.repeat(r))
 }
 
-export const dirPath = getDirPath(import.meta.url, 3)
+export const CoreDirPath = getDirPath(import.meta.url, 3)
