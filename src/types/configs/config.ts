@@ -1,14 +1,11 @@
 import { Dialect } from '@/types'
 
 export interface ConfigType {
-	proxyHost: string
-	proxyPort: number
+	mihoyo_proxy: string
 	dialect: Dialect
-	postgres: {
-		host: string
-		port: number
-		database: string
-		username: string
-		password: string
-	}
+	postgres_host: string
+	postgres_port: number
+	postgres_username: string
+	postgres_password: string
+	postgres_database: string
 }

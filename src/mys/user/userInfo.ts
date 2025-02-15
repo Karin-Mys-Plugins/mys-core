@@ -119,8 +119,8 @@ export const updataCookie = async (
 }
 
 const refreshFucMap = new Map<string, (uidList: CoreRefreshUidData) => void>()
-export const registerRefreshUidFuc = (key: string, fn: (uidList: CoreRefreshUidData) => void) => {
-	refreshFucMap.set(key, fn)
+export const registerRefreshUidFuc = (key: string, fnc: (uidList: CoreRefreshUidData) => void) => {
+	refreshFucMap.set(key, fnc)
 }
 
 export const refreshUid = async (options: {
@@ -136,7 +136,7 @@ export const refreshUid = async (options: {
 	let message = ''
 	const uidList = { data: {}, names: {} }
 	if (res?.retcode === 0) {
-		refreshFucMap.forEach(fn => fn(uidList))
+		refreshFucMap.forEach(fnc => fnc(uidList))
 	} else if (res?.retcode === -100) {
 		message = "Cookie已失效，请重新#扫码登录或#刷新Cookie！"
 	} else {

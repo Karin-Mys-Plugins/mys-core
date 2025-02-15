@@ -18,7 +18,7 @@ lerna-debug.log*
 /logs/
 /temp/
 
-# 配置
+# 打包输出
 /lib
 
 # 依赖
@@ -27,5 +27,9 @@ config/config/pm2.yaml
 index.js
 pnpm-workspace.yaml
 @karinjs/
+src/test.ts
+*.cjs
+.env
 
+web.config.mjs
 *.css.map

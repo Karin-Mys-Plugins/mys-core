@@ -6,7 +6,7 @@ export interface pluginHelpInfoDataType {
 	/** 插件帮助描述 */
 	desc?: string
 	/** 帮助自定义背景图 */
-	images?: backgroundImageType[]
+	backgroundImages?: backgroundImageType[]
 	/** 内置命令图标 */
 	icon: number
 	/** 命令列表 */
@@ -44,7 +44,7 @@ export interface pluginHelpInfoType {
 	/** 插件帮助描述 */
 	desc: string
 	/** 帮助自定义背景图 */
-	images: backgroundImageType[]
+	backgroundImages: backgroundImageType[]
 	/** 内置命令图标 */
 	icon: string
 	/** 命令列表 */

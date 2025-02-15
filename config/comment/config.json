@@ -1,6 +1,0 @@
-{
-	"proxyHost": "米游社国际服代理Host",
-	"proxyPort": "米游社国际服代理Port",
-	"dialect": "数据库选择（推荐sqlite）",
-	"postgres": "postgresql配置"
-}

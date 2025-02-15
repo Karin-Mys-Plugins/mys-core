@@ -22,8 +22,13 @@ export const sequelize = new class {
 		if (this.sql) return this.sql
 
 		if (dialect === Dialect.postgres) {
+			const cfg = config.cfg()
 			this.sql = new Sequelize({
-				...config.cfg().postgres,
+				host: cfg.postgres_host,
+				port: cfg.postgres_port,
+				database: cfg.postgres_database,
+				username: cfg.postgres_username,
+				password: cfg.postgres_password,
 				dialect: dialect,
 				logging: false
 			})

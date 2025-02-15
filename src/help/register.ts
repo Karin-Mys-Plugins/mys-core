@@ -23,7 +23,7 @@ export const Help = new class {
 				version: info.version || '',
 				name: info.name || plugin,
 				desc: info.desc || '',
-				images: info.images || [],
+				backgroundImages: info.backgroundImages || [],
 				icon: this.getIcon(info.icon || 1),
 				commandGroups: [],
 				showOther: info.showOther ?? true
@@ -73,7 +73,7 @@ export const Help = new class {
 		const helpInfo = this.#helpMap.get(plugin)
 		if (!helpInfo) return false
 
-		let helpBackgroud = lodash.sample(helpInfo.images)
+		let helpBackgroud = lodash.sample(helpInfo.backgroundImages)
 		if (helpBackgroud?.type === 'dir') {
 			if (!fs.existsSync(helpBackgroud.path)) {
 				helpBackgroud.path = ''
