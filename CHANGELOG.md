@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.9](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.8...v1.0.9) (2025-02-16)
+
+
+### Bug Fixes
+
+* 优化数据库 ([28f91b8](https://github.com/Karin-Mys-Plugins/mys-core/commit/28f91b84c70d1195f31d7bf22e454979a4675793))
+
 ## [1.0.8](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.7...v1.0.8) (2025-02-15)
 
 
