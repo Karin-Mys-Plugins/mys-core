@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.10](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.9...v1.0.10) (2025-02-16)
+
+
+### Bug Fixes
+
+* 修改导出 ([304bae2](https://github.com/Karin-Mys-Plugins/mys-core/commit/304bae230e910d21608dd50a5cfce7fdc91c7695))
+* 配置文件仅json ([13c36e2](https://github.com/Karin-Mys-Plugins/mys-core/commit/13c36e2cdf77a80daa1f3116224b75fe210b4242))
+
 ## [1.0.9](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.8...v1.0.9) (2025-02-16)
 
 
