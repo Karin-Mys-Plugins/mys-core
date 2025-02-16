@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.11](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.10...v1.0.11) (2025-02-16)
+
+
+### Bug Fixes
+
+* Column类型缺失 ([e8b64a8](https://github.com/Karin-Mys-Plugins/mys-core/commit/e8b64a895da43245edf629889b9e8a4979732f72))
+
 ## [1.0.10](https://github.com/Karin-Mys-Plugins/mys-core/compare/v1.0.9...v1.0.10) (2025-02-16)
 
 
