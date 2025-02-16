@@ -69,25 +69,25 @@ export const Column = (
 export const ArrayColumn = (key: string, options: {
 	def?: string[],
 	fn?: (data: string[]) => string[]
-} = {}): any => {
+} = {}) => {
 	const { def = [], fn = false } = options
 	return sequelize.Dialect === Dialect.postgres ? {
 		type: DataTypes.JSONB,
 		defaultValue: def,
 		get (): string[] {
-			return this.getDataValue(key).filter(Boolean)
+			return (this as unknown as sqlModel.Model<any, any>).getDataValue(key).filter(Boolean)
 		},
 		set (data: string[] = def) {
-			this.setDataValue(key, fn ? fn(data) : data)
+			(this as unknown as sqlModel.Model<any, any>).setDataValue(key, fn ? fn(data) : data)
 		}
 	} : {
 		type: DataTypes.STRING,
 		defaultValue: def.join(','),
 		get (): string[] {
-			return this.getDataValue(key).split(',').filter(Boolean)
+			return (this as unknown as sqlModel.Model<any, any>).getDataValue(key).split(',').filter(Boolean)
 		},
 		set (data: string[] = def) {
-			this.setDataValue(key, (fn ? fn(data) : data).join(','))
+			(this as unknown as sqlModel.Model<any, any>).setDataValue(key, (fn ? fn(data) : data).join(','))
 		}
 	}
 }
@@ -95,7 +95,7 @@ export const ArrayColumn = (key: string, options: {
 export const JsonColumn = (
 	key: string,
 	def: { [key in string]: any } = {}
-): any => {
+) => {
 	return sequelize.Dialect === Dialect.postgres ? {
 		type: DataTypes.JSONB,
 		defaultValue: def
@@ -103,7 +103,7 @@ export const JsonColumn = (
 		type: DataTypes.STRING,
 		defaultValue: JSON.stringify(def),
 		get (): { [key in string]: any } {
-			let data = this.getDataValue(key)
+			let data = (this as unknown as sqlModel.Model<any, any>).getDataValue(key)
 			try {
 				data = JSON.parse(data) || def
 			} catch (e) {
@@ -112,7 +112,7 @@ export const JsonColumn = (
 			return data
 		},
 		set (data: { [key in string]: any }) {
-			this.setDataValue(key, JSON.stringify(data))
+			(this as unknown as sqlModel.Model<any, any>).setDataValue(key, JSON.stringify(data))
 		}
 	}
 }
