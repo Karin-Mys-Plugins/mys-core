@@ -1,5 +1,5 @@
 import { Dialect, ModelAttributes, MysCoreReturnType } from '@/types'
-import { config } from '@/utils'
+import { CoreCfg } from '@/utils'
 import fs from 'fs'
 import { basePath, existsSync, json, logger, mkdirSync } from 'node-karin'
 import lodash from 'node-karin/lodash'
@@ -25,7 +25,7 @@ const saveSql = <T extends Record<string, any>> (self: MysCoreDb<T>, model: Mode
 	return async (data: Record<string, any>) => {
 		delete data[self.model.primaryKeyAttribute]
 
-		if (checkDialect(config.base().dialect) === Dialect.postgres && self.useType) {
+		if (checkDialect(CoreCfg.base().dialect) === Dialect.postgres && self.useType) {
 			if (self.useType === 'dir') {
 				self.writeDirSync(pk, data)
 			} else {
@@ -59,14 +59,14 @@ export class MysCoreDb<T extends Record<string, any>> {
 		this.modelName = modelName
 		this.#modelSchema = modelSchema
 
-		this.dataPath = `${basePath}/data/${config.pkg.name}/${this.modelName}`
+		this.dataPath = `${basePath}/data/${CoreCfg.pkg.name}/${this.modelName}`
 		if (type) {
 			mkdirSync(this.dataPath)
 		}
 	}
 
 	async Init () {
-		if (checkDialect(config.base().dialect) === Dialect.postgres || !this.useType) {
+		if (checkDialect(CoreCfg.base().dialect) === Dialect.postgres || !this.useType) {
 			this.model = sequelize.Init().define(this.modelName, this.#modelSchema, {
 				timestamps: false
 			})
@@ -166,7 +166,7 @@ export class MysCoreDb<T extends Record<string, any>> {
 	async findByPk (pk: string, create: true): Promise<MysCoreReturnType<T>>
 	async findByPk (pk: string, create?: false): Promise<MysCoreReturnType<T> | undefined>
 	async findByPk (pk: string, create: boolean = false): Promise<MysCoreReturnType<T> | undefined> {
-		if (checkDialect(config.base().dialect) === 'sqlite' && this.useType) {
+		if (checkDialect(CoreCfg.base().dialect) === 'sqlite' && this.useType) {
 			const path = this.userPath(pk)
 			if (!existsSync(path)) {
 				if (create) {
@@ -206,7 +206,7 @@ export class MysCoreDb<T extends Record<string, any>> {
 	}
 
 	async findAllByPks (pks: string[]): Promise<MysCoreReturnType<T>[]> {
-		if (checkDialect(config.base().dialect) === 'sqlite' && this.useType) {
+		if (checkDialect(CoreCfg.base().dialect) === 'sqlite' && this.useType) {
 			const result: MysCoreReturnType<T>[] = []
 			pks.forEach((pk) => {
 				const path = this.userPath(pk)
@@ -234,7 +234,7 @@ export class MysCoreDb<T extends Record<string, any>> {
 	}
 
 	async destroy (pk: string): Promise<boolean> {
-		if (checkDialect(config.base().dialect) === 'sqlite' && this.useType) {
+		if (checkDialect(CoreCfg.base().dialect) === 'sqlite' && this.useType) {
 			if (this.useType === 'dir') {
 				fs.rmdirSync(this.userPath(pk), { recursive: true })
 			} else {

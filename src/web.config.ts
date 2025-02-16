@@ -1,5 +1,5 @@
 import { Dialect } from '@/types'
-import { config } from '@/utils'
+import { CoreCfg } from '@/utils'
 import { components } from 'node-karin'
 import lodash from 'node-karin/lodash'
 
@@ -9,7 +9,7 @@ export default {
 	},
 	/** 动态渲染的组件 */
 	components: () => {
-		const baseCfg = config.base()
+		const baseCfg = CoreCfg.base()
 
 		return [
 			components.accordion.create('accordion-mys-core.config', {
@@ -119,7 +119,7 @@ export default {
 		const message = ['保存成功ε٩(๑> ₃ <)۶з']
 		for (const accordionKey in configData) {
 			const name = accordionKey.split('.')[1]
-			const Config = config.CoreConfig.get(name)
+			const Config = CoreCfg.CoreConfig.get(name)
 
 			const mergeData: Record<string, string> = {}
 			configData[accordionKey].map((accordionItem) => {

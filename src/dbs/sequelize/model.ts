@@ -1,5 +1,5 @@
 import { Dialect } from '@/types'
-import { config } from '@/utils'
+import { CoreCfg } from '@/utils'
 import { basePath, mkdirSync } from 'node-karin'
 import sqlModel, { DataTypes, Model, Op, Sequelize } from 'sequelize'
 
@@ -22,7 +22,7 @@ export const sequelize = new class {
 	}
 
 	Init (force = false) {
-		const baseCfg = config.base()
+		const baseCfg = CoreCfg.base()
 		if (force) {
 			this.#dialect = checkDialect(baseCfg.dialect)
 		} else if (this.sql) {
@@ -40,7 +40,7 @@ export const sequelize = new class {
 				logging: false
 			})
 		} else {
-			const dbPath = `${basePath}/data/${config.pkg.name}/db`
+			const dbPath = `${basePath}/data/${CoreCfg.pkg.name}/db`
 			mkdirSync(dbPath)
 
 			this.sql = new Sequelize({

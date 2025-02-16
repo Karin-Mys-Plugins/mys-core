@@ -51,7 +51,7 @@ class ConfigItem<T extends Record<string, any>> {
 	}
 }
 
-export class Config {
+export class CreateConfig {
 	/** @description 配置文件类型 */
 	useType = '.json'
 	/** @description 用户配置文件 */
@@ -95,7 +95,7 @@ export class Config {
 	}
 }
 
-export const CoreConfig = new Config(CoreDirPath, pkg.name)
+export const CoreConfig = new CreateConfig(CoreDirPath, pkg.name)
 
 /**
  * @description 基础配置文件
