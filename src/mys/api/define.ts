@@ -7,8 +7,8 @@ import lodash from 'node-karin/lodash'
 import { MysApp } from '.'
 
 export class defineMysApi<
-	R extends BaseMysResDataType & { [key: string]: any } | undefined = undefined,
-	D extends { [key: string]: any } = {}
+	R extends BaseMysResDataType & Record<string, any> | undefined = undefined,
+	D extends Record<string, any> = {}
 > {
 	uidInfo: UidInfo
 	#apiInfo: MysApiInfo<R, D>
@@ -90,7 +90,7 @@ export class defineMysApi<
 		return res
 	}
 
-	async checkRetCode (res: BaseMysResDataType & { [key: string]: any }, data?: D, validate: boolean = true): Promise<R> {
+	async checkRetCode (res: BaseMysResDataType & Record<string, any>, data?: D, validate: boolean = true): Promise<R> {
 		const err = (msg: string) => {
 			if (!res.error) {
 				res.error = []

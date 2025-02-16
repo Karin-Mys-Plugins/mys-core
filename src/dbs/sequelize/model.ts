@@ -1,9 +1,9 @@
-import { Dialect, ModelAttributes } from '@/types'
+import { Dialect } from '@/types'
 import { config } from '@/utils'
 import { basePath, mkdirSync } from 'node-karin'
-import sqlModel, { Model, DataTypes, Op, Sequelize } from 'sequelize'
+import sqlModel, { DataTypes, Model, Op, Sequelize } from 'sequelize'
 
-export { sqlModel, Model, Op }
+export { Model, Op, sqlModel }
 
 export const checkDialect = (dialect: string) => {
 	if (dialect === Dialect.postgres) {
@@ -13,33 +13,39 @@ export const checkDialect = (dialect: string) => {
 	}
 }
 
-export const dialect = checkDialect(config.cfg().dialect)
-
 export const sequelize = new class {
 	declare sql: Sequelize
+	#dialect: Dialect = Dialect.sqlite
 
-	Init () {
-		if (this.sql) return this.sql
+	get Dialect () {
+		return Object.freeze(this.#dialect)
+	}
 
-		if (dialect === Dialect.postgres) {
-			const cfg = config.cfg()
+	Init (force = false) {
+		const baseCfg = config.base()
+		if (force) {
+			this.#dialect = checkDialect(baseCfg.dialect)
+		} else if (this.sql) {
+			return this.sql
+		}
+
+		if (this.#dialect === Dialect.postgres) {
 			this.sql = new Sequelize({
-				host: cfg.postgres_host,
-				port: cfg.postgres_port,
-				database: cfg.postgres_database,
-				username: cfg.postgres_username,
-				password: cfg.postgres_password,
-				dialect: dialect,
+				host: baseCfg.postgres_host,
+				port: baseCfg.postgres_port,
+				database: baseCfg.postgres_database,
+				username: baseCfg.postgres_username,
+				password: baseCfg.postgres_password,
+				dialect: this.#dialect,
 				logging: false
 			})
 		} else {
 			const dbPath = `${basePath}/data/${config.pkg.name}/db`
-
 			mkdirSync(dbPath)
 
 			this.sql = new Sequelize({
 				storage: `${dbPath}/sqlite.db`,
-				dialect: dialect,
+				dialect: this.#dialect,
 				logging: false
 			})
 		}
@@ -65,7 +71,7 @@ export const ArrayColumn = (key: string, options: {
 	fn?: (data: string[]) => string[]
 } = {}): any => {
 	const { def = [], fn = false } = options
-	return dialect === Dialect.postgres ? {
+	return sequelize.Dialect === Dialect.postgres ? {
 		type: DataTypes.JSONB,
 		defaultValue: def,
 		get (): string[] {
@@ -90,7 +96,7 @@ export const JsonColumn = (
 	key: string,
 	def: { [key in string]: any } = {}
 ): any => {
-	return dialect === Dialect.postgres ? {
+	return sequelize.Dialect === Dialect.postgres ? {
 		type: DataTypes.JSONB,
 		defaultValue: def
 	} : {
@@ -107,32 +113,6 @@ export const JsonColumn = (
 		},
 		set (data: { [key in string]: any }) {
 			this.setDataValue(key, JSON.stringify(data))
-		}
-	}
-}
-
-export const InitDb = async<T extends Model> (
-	model: sqlModel.ModelStatic<T>,
-	COLUMNS: ModelAttributes<T>
-) => {
-	model.init(COLUMNS as any, {
-		sequelize: sequelize.Init(),
-		tableName: model.name
-	})
-
-	await model.sync()
-
-	const queryInterface = sequelize.Init().getQueryInterface()
-	const tableDescription = await queryInterface.describeTable(model.name)
-	for (const key in COLUMNS) {
-		if (!tableDescription[key]) {
-			await queryInterface.addColumn(model.name, key, COLUMNS[key])
-			if (typeof COLUMNS[key] === 'string') continue
-
-			const defaultValue = (COLUMNS[key] as sqlModel.ModelAttributeColumnOptions<T>).defaultValue
-			if (defaultValue !== undefined) {
-				await model.update({ [key as any]: defaultValue }, { where: {} })
-			}
 		}
 	}
 }

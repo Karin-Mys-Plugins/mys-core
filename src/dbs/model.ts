@@ -5,27 +5,27 @@ import { basePath, existsSync, json, logger, mkdirSync } from 'node-karin'
 import lodash from 'node-karin/lodash'
 import { Model, checkDialect, sequelize, sqlModel } from './sequelize'
 
-const saveFile = <T extends { [key: string]: any }> (self: MysCoreDb<T>, pk: string) => {
-	return async (data: T) => {
+const saveFile = <T extends Record<string, any>> (self: MysCoreDb<T>, pk: string) => {
+	return async (data: Record<string, any>) => {
 		delete data[self.model.primaryKeyAttribute]
 
 		self.writeFileSync(pk, data)
 	}
 }
 
-const saveDir = <T extends { [key: string]: any }> (self: MysCoreDb<T>, pk: string) => {
-	return async (data: T) => {
+const saveDir = <T extends Record<string, any>> (self: MysCoreDb<T>, pk: string) => {
+	return async (data: Record<string, any>) => {
 		delete data[self.model.primaryKeyAttribute]
 
 		self.writeDirSync(pk, data)
 	}
 }
 
-const saveSql = <T extends { [key: string]: any }> (self: MysCoreDb<T>, model: Model<any, any>, pk: string) => {
-	return async (data: T) => {
+const saveSql = <T extends Record<string, any>> (self: MysCoreDb<T>, model: Model<any, any>, pk: string) => {
+	return async (data: Record<string, any>) => {
 		delete data[self.model.primaryKeyAttribute]
 
-		if (checkDialect(config.cfg().dialect) === Dialect.postgres && self.useType) {
+		if (checkDialect(config.base().dialect) === Dialect.postgres && self.useType) {
 			if (self.useType === 'dir') {
 				self.writeDirSync(pk, data)
 			} else {
@@ -33,11 +33,16 @@ const saveSql = <T extends { [key: string]: any }> (self: MysCoreDb<T>, model: M
 			}
 		}
 
+		const Attributes = self.schemaToJSON(pk)
+		for (const key in data) {
+			!(key in Attributes) && delete data[key]
+		}
+
 		await model.update(data)
 	}
 }
 
-export class MysCoreDb<T extends { [key: string]: any }> {
+export class MysCoreDb<T extends Record<string, any>> {
 	declare model: sqlModel.ModelStatic<Model<any, any>>
 
 	modelName: string
@@ -60,12 +65,26 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 		}
 	}
 
-	Init () {
-		if (checkDialect(config.cfg().dialect) === Dialect.postgres || !this.useType) {
+	async Init () {
+		if (checkDialect(config.base().dialect) === Dialect.postgres || !this.useType) {
 			this.model = sequelize.Init().define(this.modelName, this.#modelSchema, {
 				timestamps: false
 			})
 			this.model.sync()
+
+			const queryInterface = sequelize.Init().getQueryInterface()
+			const tableDescription = await queryInterface.describeTable(this.modelName)
+			for (const key in this.#modelSchema) {
+				if (!tableDescription[key]) {
+					await queryInterface.addColumn(this.modelName, key, this.#modelSchema[key])
+					if (typeof this.#modelSchema[key] === 'string') continue
+
+					const defaultValue = (this.#modelSchema[key] as any).defaultValue
+					if (defaultValue !== undefined) {
+						await this.model.update({ [key]: defaultValue }, { where: {} })
+					}
+				}
+			}
 		}
 
 		return this
@@ -90,7 +109,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 		const path = this.userPath(pk)
 		const files = fs.readdirSync(path)
 
-		const result: { [key: string]: any } = {
+		const result: Record<string, any> = {
 			_save: saveDir<T>(this, pk),
 			[this.model.primaryKeyAttribute]: pk
 		}
@@ -105,14 +124,18 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 		return result as MysCoreReturnType<T>
 	}
 
-	writeFileSync (pk: string, data: T) {
+	writeFileSync (pk: string, data: Record<string, any>) {
 		const def_data = this.schemaToJSON(pk)
+		for (const key in data) {
+			!(key in def_data) && delete data[key]
+		}
+
 		json.writeSync(this.userPath(pk), lodash.merge(def_data, data))
 
 		return true
 	}
 
-	writeDirSync (pk: string, data: T) {
+	writeDirSync (pk: string, data: Record<string, any>) {
 		const path = this.userPath(pk)
 		lodash.forEach(this.#modelSchema, (value, key) => {
 			if (key !== this.model.primaryKeyAttribute) {
@@ -128,7 +151,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 	}
 
 	schemaToJSON (pk: string): T {
-		const result: { [key: string]: any } = {
+		const result: Record<string, any> = {
 			[this.model.primaryKeyAttribute]: pk
 		}
 		lodash.forEach(this.#modelSchema, (value, key) => {
@@ -143,7 +166,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 	async findByPk (pk: string, create: true): Promise<MysCoreReturnType<T>>
 	async findByPk (pk: string, create?: false): Promise<MysCoreReturnType<T> | undefined>
 	async findByPk (pk: string, create: boolean = false): Promise<MysCoreReturnType<T> | undefined> {
-		if (checkDialect(config.cfg().dialect) === 'sqlite' && this.useType) {
+		if (checkDialect(config.base().dialect) === 'sqlite' && this.useType) {
 			const path = this.userPath(pk)
 			if (!existsSync(path)) {
 				if (create) {
@@ -183,7 +206,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 	}
 
 	async findAllByPks (pks: string[]): Promise<MysCoreReturnType<T>[]> {
-		if (checkDialect(config.cfg().dialect) === 'sqlite' && this.useType) {
+		if (checkDialect(config.base().dialect) === 'sqlite' && this.useType) {
 			const result: MysCoreReturnType<T>[] = []
 			pks.forEach((pk) => {
 				const path = this.userPath(pk)
@@ -211,7 +234,7 @@ export class MysCoreDb<T extends { [key: string]: any }> {
 	}
 
 	async destroy (pk: string): Promise<boolean> {
-		if (checkDialect(config.cfg().dialect) === 'sqlite' && this.useType) {
+		if (checkDialect(config.base().dialect) === 'sqlite' && this.useType) {
 			if (this.useType === 'dir') {
 				fs.rmdirSync(this.userPath(pk), { recursive: true })
 			} else {

@@ -1,3 +1,3 @@
 export type MysCoreReturnType<T> = T & {
-	_save: (data: T) => Promise<void>
+	_save: (data: Record<string, any>) => Promise<void>
 }

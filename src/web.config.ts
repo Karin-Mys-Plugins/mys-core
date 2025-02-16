@@ -9,7 +9,7 @@ export default {
 	},
 	/** 动态渲染的组件 */
 	components: () => {
-		const cfg = config.cfg()
+		const cfg = config.base()
 
 		return [
 			components.accordion.create('accordion-mys-core.config', {

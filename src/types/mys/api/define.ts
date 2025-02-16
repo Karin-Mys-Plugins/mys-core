@@ -15,8 +15,8 @@ export interface BaseMysResDataType {
 }
 
 export interface MysApiInfo<
-	R extends BaseMysResDataType & { [key: string]: any } | undefined = undefined,
-	D extends { [key: string]: any } = {}
+	R extends BaseMysResDataType & Record<string, any> | undefined = undefined,
+	D extends Record<string, any> = {}
 > {
 	method: requestMethod
 	url: (self: defineMysApi<R, D>, data: D) => URL

@@ -1,4 +1,4 @@
-import { ConfigType, pluginHelpInfoDataType } from '@/types'
+import { CoreBaseConfig, pluginHelpInfoDataType } from '@/types'
 import { CoreDirPath } from '@/utils'
 import {
 	basePath,
@@ -99,9 +99,9 @@ export class Config {
 export const CoreConfig = new Config(CoreDirPath, pkg.name, '.json')
 
 /**
- * @description 配置文件
+ * @description 基础配置文件
  */
-export const cfg = () => CoreConfig.get<ConfigType>('config')
+export const base = () => CoreConfig.get<CoreBaseConfig>('base')
 
 /**
  * @description 自定义帮助

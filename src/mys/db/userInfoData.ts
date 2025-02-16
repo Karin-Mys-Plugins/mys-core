@@ -9,4 +9,4 @@ export const baseUserInfoDataSchema = {
 	stuids: ArrayColumn('stuids')
 }
 
-export const userInfoData = new MysCoreDb<baseUserInfoDataType>('userInfoData', baseUserInfoDataSchema).Init()
+export const userInfoData = await new MysCoreDb<baseUserInfoDataType>('userInfoData', baseUserInfoDataSchema).Init()

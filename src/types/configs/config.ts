@@ -1,6 +1,6 @@
 import { Dialect } from '@/types'
 
-export interface ConfigType {
+export interface CoreBaseConfig {
 	mihoyo_proxy: string
 	dialect: Dialect
 	postgres_host: string
