@@ -52,19 +52,18 @@ class ConfigItem<T extends Record<string, any>> {
 }
 
 export class Config {
+	/** @description 配置文件类型 */
+	useType = '.json'
 	/** @description 用户配置文件 */
 	dirConfigPath: string
 	/** @description 默认配置文件 */
 	defConfigPath: string
-	/** @description 配置文件类型 */
-	useType: '.json' | '.yaml' | '.yml'
 	/** @description 缓存配置文件 */
 	#catchConfig: Map<string, ConfigItem<Record<string, any>>> = new Map()
 
-	constructor (dirPath: string, pkgName: string, useType: '.json' | '.yaml' | '.yml') {
+	constructor (dirPath: string, pkgName: string) {
 		this.dirConfigPath = `${basePath}/${pkgName}/config`
 		this.defConfigPath = `${dirPath}/config/config`
-		this.useType = useType
 
 		/** @description 初始化配置文件 */
 		copyConfigSync(this.defConfigPath, this.dirConfigPath, [this.useType])
@@ -96,7 +95,7 @@ export class Config {
 	}
 }
 
-export const CoreConfig = new Config(CoreDirPath, pkg.name, '.json')
+export const CoreConfig = new Config(CoreDirPath, pkg.name)
 
 /**
  * @description 基础配置文件

@@ -9,7 +9,7 @@ export default {
 	},
 	/** 动态渲染的组件 */
 	components: () => {
-		const cfg = config.base()
+		const baseCfg = config.base()
 
 		return [
 			components.accordion.create('accordion-mys-core.config', {
@@ -25,7 +25,7 @@ export default {
 								label: '米游社国际服代理',
 								color: 'success',
 								placeholder: "示例：http://127.0.0.1:8080",
-								defaultValue: cfg.mihoyo_proxy,
+								defaultValue: baseCfg.mihoyo_proxy,
 								isClearable: true,
 								isRequired: false,
 								rules: [
@@ -41,7 +41,7 @@ export default {
 								description: "普通用户使用Sqlite即可，若切换至postgresql，请保存后重新进入配置界面填写postgresql配置！",
 								isRequired: true,
 								orientation: 'horizontal',
-								defaultValue: cfg.dialect,
+								defaultValue: baseCfg.dialect,
 								radio: [
 									components.radio.create('dialect-sqlite', {
 										label: 'Sqlite',
@@ -53,11 +53,11 @@ export default {
 									})
 								]
 							}),
-							...(cfg.dialect === Dialect.postgres ? [
+							...(baseCfg.dialect === Dialect.postgres ? [
 								components.divider.create('divider-mys-core-after.config.dialect'),
 								components.input.string('mys-core.config.postgres_host', {
 									label: 'postgresql配置Host',
-									defaultValue: 'localhost',
+									defaultValue: baseCfg.postgres_host,
 									placeholder: '请输入Host',
 									isClearable: true,
 									isRequired: true,
@@ -70,7 +70,7 @@ export default {
 								}),
 								components.input.number('mys-core.config.postgres_port', {
 									label: 'postgresql配置Port',
-									defaultValue: '5432',
+									defaultValue: baseCfg.postgres_host,
 									placeholder: '请输入端口(0-65535)',
 									isClearable: true,
 									isRequired: true,
@@ -82,26 +82,26 @@ export default {
 										}
 									]
 								}),
-								components.input.string('mys-core.config.postgres_database', {
-									label: 'postgresql配置Database',
-									defaultValue: 'mys_core',
-									placeholder: '请输入Database',
-									isClearable: true,
-									isRequired: true
-								}),
 								components.input.string('mys-core.config.postgres_username', {
 									label: 'postgresql配置Username',
-									defaultValue: 'postgres',
+									defaultValue: baseCfg.postgres_username,
 									placeholder: '请输入Username',
 									isClearable: true,
 									isRequired: true
 								}),
 								components.input.string('mys-core.config.postgres_password', {
 									label: 'postgresql配置Password',
-									defaultValue: 'a123456',
+									defaultValue: baseCfg.postgres_password,
 									placeholder: '请输入Password',
 									isClearable: true,
 									isRequired: false
+								}),
+								components.input.string('mys-core.config.postgres_database', {
+									label: 'postgresql配置Database',
+									defaultValue: baseCfg.postgres_database,
+									placeholder: '请输入Database',
+									isClearable: true,
+									isRequired: true
 								})
 							] : [])
 						]
